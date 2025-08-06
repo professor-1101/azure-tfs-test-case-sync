@@ -1,0 +1,17 @@
+# Core FastAPI dependencies
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.11.7
+pydantic-settings==2.10.1
+
+# HTTP and Authentication
+requests==2.31.0
+requests-ntlm>=1.1.0
+python-multipart==0.0.6
+
+# Testing
+pytest==8.4.1
+httpx==0.28.1
+
+# Additional utilities
+python-dotenv==1.0.1
