@@ -1,0 +1,41 @@
+# Production Requirements for Azure Test Plan Import API
+
+# Core FastAPI framework
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+gunicorn==21.2.0
+uvloop==0.19.0
+httptools==0.6.1
+
+# HTTP client for Azure DevOps API
+requests==2.31.0
+requests-ntlm==1.2.0
+
+# Data validation and parsing
+pydantic==2.5.0
+python-multipart==0.0.6
+
+# File handling and parsing
+python-json-logger==2.0.7
+
+# Environment management
+python-dotenv==1.0.0
+
+# Performance and monitoring
+psutil==5.9.6
+
+# Security
+cryptography==41.0.8
+
+# Optional: Database support (if needed)
+# sqlalchemy==2.0.23
+# alembic==1.12.1
+
+# Optional: Monitoring and logging
+# sentry-sdk[fastapi]==1.38.0
+# prometheus-client==0.19.0
+
+# Development/Testing (comment out for production)
+# pytest==7.4.3
+# pytest-asyncio==0.21.1
+# httpx==0.25.2

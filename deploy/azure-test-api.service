@@ -1,0 +1,53 @@
+[Unit]
+Description=Azure Test Plan Import API
+Documentation=https://github.com/professor-1101/azure-tfs-test-case-sync
+After=network.target
+Wants=network.target
+
+[Service]
+Type=exec
+User=azureapi
+Group=azureapi
+WorkingDirectory=/opt/azure-test-api
+Environment=PATH=/opt/azure-test-api/venv/bin
+EnvironmentFile=/opt/azure-test-api/.env
+ExecStart=/opt/azure-test-api/venv/bin/gunicorn main:app \
+    --bind 0.0.0.0:5050 \
+    --workers 4 \
+    --worker-class uvicorn.workers.UvicornWorker \
+    --timeout 300 \
+    --keep-alive 5 \
+    --max-requests 1000 \
+    --max-requests-jitter 100 \
+    --access-logfile /opt/azure-test-api/logs/access.log \
+    --error-logfile /opt/azure-test-api/logs/error.log \
+    --log-level info \
+    --capture-output \
+    --enable-stdio-inheritance
+
+# Restart policy
+Restart=always
+RestartSec=10
+StartLimitInterval=60
+StartLimitBurst=3
+
+# Security settings
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/azure-test-api/logs
+CapabilityBoundingSet=CAP_NET_BIND_SERVICE
+
+# Resource limits
+LimitNOFILE=65536
+LimitNPROC=4096
+
+# Health check
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=mixed
+KillSignal=SIGTERM
+TimeoutStopSec=30
+
+[Install]
+WantedBy=multi-user.target
