@@ -11,32 +11,17 @@ Group=azureapi
 WorkingDirectory=/opt/azure-test-api
 Environment=PATH=/opt/azure-test-api/venv/bin
 EnvironmentFile=/opt/azure-test-api/.env
-ExecStart=/opt/azure-test-api/venv/bin/gunicorn main:app \
-    --bind 0.0.0.0:5050 \
-    --workers 4 \
-    --worker-class uvicorn.workers.UvicornWorker \
-    --timeout 300 \
-    --keep-alive 5 \
-    --max-requests 1000 \
-    --max-requests-jitter 100 \
-    --access-logfile /opt/azure-test-api/logs/access.log \
-    --error-logfile /opt/azure-test-api/logs/error.log \
-    --log-level info \
-    --capture-output \
-    --enable-stdio-inheritance
+ExecStart=/opt/azure-test-api/venv/bin/python -m uvicorn main:app \
+    --host 0.0.0.0 \
+    --port 5050 \
+    --workers 1 \
+    --log-level info
 
 # Restart policy - Auto restart on failure
 Restart=always
 RestartSec=10
-StartLimitInterval=300
+StartLimitIntervalSec=300
 StartLimitBurst=5
-
-# Auto-start after system boot
-WantedBy=multi-user.target
-
-# Failure handling
-OnFailure=
-FailureAction=restart
 
 # Security settings
 NoNewPrivileges=true
