@@ -194,10 +194,34 @@ async def info():
 
 
 if __name__ == "__main__":
+    import socket
+    
+    # Auto-detect local IP address
+    def get_local_ip():
+        try:
+            # Connect to a remote address to determine local IP
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            s.connect(("8.8.8.8", 80))
+            local_ip = s.getsockname()[0]
+            s.close()
+            return local_ip
+        except Exception:
+            # Fallback to localhost if detection fails
+            return "127.0.0.1"
+    
+    host_ip = get_local_ip()
+    port = 5050
+    
+    print(f"🚀 Starting Azure Test Plan Import API...")
+    print(f"📡 Server will be available at: http://{host_ip}:{port}")
+    print(f"📖 API Documentation: http://{host_ip}:{port}/docs")
+    print(f"🔍 Health Check: http://{host_ip}:{port}/health")
+    print(f"ℹ️  API Info: http://{host_ip}:{port}/info")
+    
     uvicorn.run(
         "main:app",
         host="0.0.0.0",
-        port=5050,
+        port=port,
         reload=True,
         log_level=settings.log_level.lower()
     )

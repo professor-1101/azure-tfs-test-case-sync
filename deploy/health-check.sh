@@ -3,7 +3,9 @@
 # Azure Test API Health Check Script
 # Can be used with cron for monitoring
 
-API_URL="http://localhost:5050"
+# Auto-detect server IP or use localhost as fallback
+SERVER_IP=$(hostname -I | awk '{print $1}' || echo "127.0.0.1")
+API_URL="http://$SERVER_IP:5050"
 SERVICE_NAME="azure-test-api"
 LOG_FILE="/var/log/azure-api-health.log"
 MAX_LOG_SIZE=10485760  # 10MB

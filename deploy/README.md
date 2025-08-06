@@ -165,8 +165,8 @@ Add this line:
 # Check service health
 ./deploy/health-check.sh --verbose
 
-# Check API endpoint
-curl http://localhost:5050/health
+# Check API endpoint (replace with your server IP)
+curl http://your-server-ip:5050/health
 
 # Check service status
 sudo systemctl status azure-test-api

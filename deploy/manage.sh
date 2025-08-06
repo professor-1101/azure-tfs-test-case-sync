@@ -42,6 +42,18 @@ service_start() {
     systemctl start $SERVICE_NAME
     if systemctl is-active --quiet $SERVICE_NAME; then
         print_status "Service started successfully"
+        
+        # Auto-detect and display server IP
+        SERVER_IP=$(hostname -I | awk '{print $1}' || echo "127.0.0.1")
+        
+        echo ""
+        print_status "🚀 API is now running at:"
+        echo "  📡 API: http://$SERVER_IP:5050"
+        echo "  📖 Documentation: http://$SERVER_IP:5050/docs"
+        echo "  🔍 Health Check: http://$SERVER_IP:5050/health"
+        echo "  ℹ️  API Info: http://$SERVER_IP:5050/info"
+        echo ""
+        
         systemctl status $SERVICE_NAME --no-pager -l
     else
         print_error "Failed to start service"

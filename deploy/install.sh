@@ -92,10 +92,13 @@ AZURE_DEVOPS_PROJECT_NAME=YourProject
 AZURE_DEVOPS_USERNAME=YourUsername
 AZURE_DEVOPS_PASSWORD=YourPassword
 
-# API Configuration
+# API Configuration  
 API_HOST=0.0.0.0
 API_PORT=5050
 LOG_LEVEL=INFO
+
+# Auto-detect server IP for display
+SERVER_IP=$(hostname -I | awk '{print $1}' || echo "127.0.0.1")
 
 # Security (generate new secret key)
 SECRET_KEY=$(openssl rand -hex 32)
@@ -109,9 +112,19 @@ chmod 600 $API_HOME/.env
 
 print_status "Installation completed!"
 print_warning "Please edit $API_HOME/.env with your Azure DevOps credentials"
+
+# Detect and display server IP
+SERVER_IP=$(hostname -I | awk '{print $1}' || echo "127.0.0.1")
+
+print_status "Server will be available at: http://$SERVER_IP:5050"
 print_status "Next steps:"
 echo "  1. Edit configuration: sudo nano $API_HOME/.env"
 echo "  2. Start service: sudo systemctl start $SERVICE_NAME"
-echo "  3. Enable autostart: sudo systemctl enable $SERVICE_NAME"
+echo "  3. Enable autostart: sudo systemctl enable $SERVICE_NAME" 
 echo "  4. Check status: sudo systemctl status $SERVICE_NAME"
 echo "  5. View logs: sudo journalctl -u $SERVICE_NAME -f"
+echo ""
+print_status "After starting the service, access:"
+echo "  📡 API: http://$SERVER_IP:5050"
+echo "  📖 Docs: http://$SERVER_IP:5050/docs"
+echo "  🔍 Health: http://$SERVER_IP:5050/health"
