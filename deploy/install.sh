@@ -174,6 +174,10 @@ systemctl daemon-reload
 systemctl enable $SERVICE_NAME
 print_status "✅ Service enabled for auto-start on system boot"
 
+print_status "Making scripts executable..."
+# Make all shell scripts executable
+chmod +x $API_HOME/deploy/*.sh
+
 print_status "Installation completed!"
 print_warning "Please edit $API_HOME/.env with your Azure DevOps credentials"
 
@@ -184,7 +188,7 @@ print_status "Server will be available at: http://$SERVER_IP:5050"
 print_status "Next steps:"
 echo "  1. Edit configuration: sudo nano $API_HOME/.env"
 echo "  2. Start service: sudo systemctl start $SERVICE_NAME"
-echo "  3. Check status: sudo systemctl status $SERVICE_NAME"
+echo "  3. Check status: sudo $API_HOME/deploy/manage.sh status"
 echo "  4. View logs: sudo journalctl -u $SERVICE_NAME -f"
 echo ""
 print_status "🔄 Auto-restart features enabled:"
@@ -196,3 +200,10 @@ print_status "After starting the service, access:"
 echo "  📡 API: http://$SERVER_IP:5050"
 echo "  📖 Docs: http://$SERVER_IP:5050/docs"
 echo "  🔍 Health: http://$SERVER_IP:5050/health"
+echo ""
+print_status "📋 Management commands:"
+echo "  sudo $API_HOME/deploy/manage.sh start     # Start service"
+echo "  sudo $API_HOME/deploy/manage.sh stop      # Stop service"
+echo "  sudo $API_HOME/deploy/manage.sh restart   # Restart service"
+echo "  sudo $API_HOME/deploy/manage.sh status    # Check status"
+echo "  sudo $API_HOME/deploy/manage.sh logs      # View logs"

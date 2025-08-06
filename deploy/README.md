@@ -26,10 +26,25 @@ sudo nano /opt/azure-test-api/.env
 # Start service 
 sudo systemctl start azure-test-api
 
+# Check status using management script
+sudo /opt/azure-test-api/deploy/manage.sh status
+
 # ✅ Service is now running and will:
 #    - Restart automatically if it crashes
 #    - Start automatically on system boot
 #    - Be monitored by systemd
+```
+
+### 🔧 If Scripts Are Not Executable
+If you get "command not found" errors, fix permissions:
+
+```bash
+# Quick fix from project directory
+sudo bash deploy/fix-permissions.sh
+
+# Or manually
+sudo chmod +x deploy/*.sh
+sudo chmod +x /opt/azure-test-api/deploy/*.sh
 ```
 
 ## 📋 Manual Installation Steps
@@ -108,21 +123,24 @@ sudo systemctl restart nginx
 The `manage.sh` script provides easy service management:
 
 ```bash
-# Make executable
-chmod +x /opt/azure-test-api/deploy/manage.sh
+# From project directory (after installation)
+sudo /opt/azure-test-api/deploy/manage.sh start      # Start service
+sudo /opt/azure-test-api/deploy/manage.sh stop       # Stop service
+sudo /opt/azure-test-api/deploy/manage.sh restart    # Restart service
+sudo /opt/azure-test-api/deploy/manage.sh status     # Show status
+sudo /opt/azure-test-api/deploy/manage.sh logs       # Follow logs
 
-# Service operations
-sudo ./deploy/manage.sh start      # Start service
-sudo ./deploy/manage.sh stop       # Stop service
-sudo ./deploy/manage.sh restart    # Restart service
-sudo ./deploy/manage.sh status     # Show status
-sudo ./deploy/manage.sh logs       # Follow logs
+# Alternative (from deploy directory)
+cd /opt/azure-test-api/deploy
+sudo ./manage.sh status    # After cd to deploy directory
 
-# Maintenance
-sudo ./deploy/manage.sh install    # Install systemd service
-sudo ./deploy/manage.sh update     # Update application
-sudo ./deploy/manage.sh uninstall  # Remove service
+# Maintenance commands
+sudo /opt/azure-test-api/deploy/manage.sh install    # Install systemd service
+sudo /opt/azure-test-api/deploy/manage.sh update     # Update application
+sudo /opt/azure-test-api/deploy/manage.sh uninstall  # Remove service
 ```
+
+**💡 Tip**: Always use full paths or cd to the deploy directory first!
 
 
 
