@@ -25,11 +25,18 @@ ExecStart=/opt/azure-test-api/venv/bin/gunicorn main:app \
     --capture-output \
     --enable-stdio-inheritance
 
-# Restart policy
+# Restart policy - Auto restart on failure
 Restart=always
 RestartSec=10
-StartLimitInterval=60
-StartLimitBurst=3
+StartLimitInterval=300
+StartLimitBurst=5
+
+# Auto-start after system boot
+WantedBy=multi-user.target
+
+# Failure handling
+OnFailure=
+FailureAction=restart
 
 # Security settings
 NoNewPrivileges=true

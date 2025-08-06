@@ -17,8 +17,19 @@ Complete guide for deploying the Azure Test Plan Import API on Linux servers.
 git clone https://github.com/professor-1101/azure-tfs-test-case-sync.git
 cd azure-tfs-test-case-sync
 
-# Run installation script
+# Run installation script (includes auto-start setup)
 sudo bash deploy/install.sh
+
+# Edit configuration
+sudo nano /opt/azure-test-api/.env
+
+# Start service 
+sudo systemctl start azure-test-api
+
+# ✅ Service is now running and will:
+#    - Restart automatically if it crashes
+#    - Start automatically on system boot
+#    - Be monitored by systemd
 ```
 
 ## 📋 Manual Installation Steps
@@ -115,6 +126,44 @@ sudo ./deploy/manage.sh uninstall  # Remove service
 
 
 
+## 🔄 Auto-Restart & Auto-Start Features
+
+### Automatic Service Restart
+The service is configured to automatically restart if it crashes:
+
+```bash
+# Service will restart automatically with these settings:
+Restart=always                 # Always restart on failure
+RestartSec=10                 # Wait 10 seconds before restart
+StartLimitBurst=5             # Maximum 5 restart attempts
+StartLimitInterval=300        # Within 5 minutes
+```
+
+### Auto-Start on System Boot
+The service automatically starts when the server boots:
+
+```bash
+# Check if auto-start is enabled
+sudo systemctl is-enabled azure-test-api
+
+# Enable auto-start (done automatically during installation)
+sudo systemctl enable azure-test-api
+
+# Disable auto-start (if needed)
+sudo systemctl disable azure-test-api
+```
+
+### Service Status Check
+```bash
+# Check service status and auto-start configuration
+sudo ./deploy/manage.sh status
+
+# Expected output:
+# ✓ Service is running
+# ✓ API is responding  
+# ✓ Service is enabled (will start on boot)
+```
+
 ## 📊 Monitoring & Health Checks
 
 ### Automated Health Monitoring
@@ -130,6 +179,14 @@ Add this line:
 ```cron
 */5 * * * * /opt/azure-test-api/deploy/health-check.sh --auto-restart
 ```
+
+### What the Health Check Does
+- ✅ Monitors service status
+- ✅ Tests API endpoints  
+- ✅ Checks disk space and memory
+- ✅ Automatically restarts if unhealthy
+- ✅ Ensures auto-start is enabled
+- ✅ Logs all activities
 
 ### Manual Health Check
 ```bash

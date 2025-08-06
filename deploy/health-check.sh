@@ -112,6 +112,14 @@ check_memory() {
 # Restart service if needed
 restart_service() {
     log_message "RESTARTING: Azure Test API service"
+    
+    # Check if service is enabled for auto-start
+    if ! systemctl is-enabled --quiet $SERVICE_NAME; then
+        log_message "WARNING: Service is not enabled for auto-start"
+        log_message "ENABLING: Service for auto-start on boot"
+        systemctl enable $SERVICE_NAME
+    fi
+    
     systemctl restart $SERVICE_NAME
     
     # Wait for service to start

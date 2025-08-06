@@ -110,6 +110,15 @@ EOF
 chown $API_USER:$API_USER $API_HOME/.env
 chmod 600 $API_HOME/.env
 
+print_status "Setting up systemd service..."
+# Copy and install systemd service
+cp $API_HOME/deploy/azure-test-api.service /etc/systemd/system/
+systemctl daemon-reload
+
+# Enable service for auto-start on boot
+systemctl enable $SERVICE_NAME
+print_status "✅ Service enabled for auto-start on system boot"
+
 print_status "Installation completed!"
 print_warning "Please edit $API_HOME/.env with your Azure DevOps credentials"
 
@@ -120,9 +129,13 @@ print_status "Server will be available at: http://$SERVER_IP:5050"
 print_status "Next steps:"
 echo "  1. Edit configuration: sudo nano $API_HOME/.env"
 echo "  2. Start service: sudo systemctl start $SERVICE_NAME"
-echo "  3. Enable autostart: sudo systemctl enable $SERVICE_NAME" 
-echo "  4. Check status: sudo systemctl status $SERVICE_NAME"
-echo "  5. View logs: sudo journalctl -u $SERVICE_NAME -f"
+echo "  3. Check status: sudo systemctl status $SERVICE_NAME"
+echo "  4. View logs: sudo journalctl -u $SERVICE_NAME -f"
+echo ""
+print_status "🔄 Auto-restart features enabled:"
+echo "  ✅ Service will restart automatically if it crashes"
+echo "  ✅ Service will start automatically on system boot"
+echo "  ✅ Up to 5 restart attempts within 5 minutes"
 echo ""
 print_status "After starting the service, access:"
 echo "  📡 API: http://$SERVER_IP:5050"

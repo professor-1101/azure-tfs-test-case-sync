@@ -92,8 +92,9 @@ service_status() {
     if systemctl is-active --quiet $SERVICE_NAME; then
         echo -e "${GREEN}✓${NC} Service is running"
         # Test API endpoint
+        SERVER_IP=$(hostname -I | awk '{print $1}' || echo "127.0.0.1")
         if command -v curl >/dev/null 2>&1; then
-            if curl -f -s http://localhost:5050/health >/dev/null; then
+            if curl -f -s http://$SERVER_IP:5050/health >/dev/null; then
                 echo -e "${GREEN}✓${NC} API is responding"
             else
                 echo -e "${RED}✗${NC} API is not responding"
@@ -101,6 +102,15 @@ service_status() {
         fi
     else
         echo -e "${RED}✗${NC} Service is not running"
+    fi
+    
+    echo ""
+    print_header "Auto-start configuration:"
+    if systemctl is-enabled --quiet $SERVICE_NAME; then
+        echo -e "${GREEN}✓${NC} Service is enabled (will start on boot)"
+    else
+        echo -e "${RED}✗${NC} Service is disabled (won't start on boot)"
+        echo "  Run: sudo systemctl enable $SERVICE_NAME"
     fi
 }
 
@@ -119,11 +129,16 @@ service_install() {
     # Reload systemd
     systemctl daemon-reload
     
-    # Enable service
+    # Enable service for auto-start
     systemctl enable $SERVICE_NAME
     
-    print_status "Service installed and enabled"
-    print_status "Use './manage.sh start' to start the service"
+    print_status "Service installed and enabled for auto-start"
+    print_status "🔄 Auto-restart features:"
+    echo "  ✅ Service will restart automatically if it crashes"
+    echo "  ✅ Service will start automatically on system boot" 
+    echo "  ✅ Up to 5 restart attempts within 5 minutes"
+    echo ""
+    print_status "Use './manage.sh start' to start the service now"
 }
 
 service_uninstall() {
