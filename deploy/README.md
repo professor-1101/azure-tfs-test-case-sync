@@ -113,36 +113,7 @@ sudo ./deploy/manage.sh update     # Update application
 sudo ./deploy/manage.sh uninstall  # Remove service
 ```
 
-## 🐳 Docker Deployment
 
-### Using Docker Compose
-```bash
-# Create environment file
-cp deploy/env.example deploy/.env
-# Edit deploy/.env with your settings
-
-# Start services
-cd deploy
-docker-compose up -d
-
-# Check status
-docker-compose ps
-docker-compose logs -f azure-test-api
-```
-
-### Manual Docker
-```bash
-# Build image
-docker build -f deploy/Dockerfile -t azure-test-api .
-
-# Run container
-docker run -d \
-  --name azure-test-api \
-  -p 5050:5050 \
-  -v $(pwd)/logs:/app/logs \
-  -v $(pwd)/.env:/app/.env:ro \
-  azure-test-api
-```
 
 ## 📊 Monitoring & Health Checks
 
@@ -194,13 +165,28 @@ sudo systemctl status azure-test-api
    curl -u "username:password" http://your-server:8080/tfs/Collection/_apis/projects
    ```
 
-4. **High memory usage**
+4. **Port already in use**
+   ```bash
+   # Check what's using port 5050
+   sudo lsof -i :5050
+   sudo netstat -tulpn | grep :5050
+   ```
+
+5. **High memory usage**
    ```bash
    # Restart service
    sudo systemctl restart azure-test-api
    
    # Check worker count in .env
    API_WORKERS=2  # Reduce if needed
+   ```
+
+6. **Firewall blocking access**
+   ```bash
+   # Allow port 5050
+   sudo ufw allow 5050/tcp
+   # Or for iptables:
+   sudo iptables -A INPUT -p tcp --dport 5050 -j ACCEPT
    ```
 
 ### Log Locations

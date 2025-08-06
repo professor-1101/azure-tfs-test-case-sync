@@ -102,3 +102,8 @@ api_*.log*
 
 # IDE specific
 .idea/
+
+# Docker files (not needed)
+Dockerfile*
+docker-compose*.yml
+.dockerignore
