@@ -17,7 +17,7 @@ async def lifespan(app: FastAPI):
     logger.info("Starting Azure DevOps Test Plan Import API")
     logger.info(f"Version: {settings.version}")
     logger.info(f"Azure DevOps URL: {settings.azure_devops_org_url}")
-    logger.info(f"Project: {settings.azure_devops_project}")
+    logger.info("Ready to process requests for any Azure DevOps project")
     
     yield
     
