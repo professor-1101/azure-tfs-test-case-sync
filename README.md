@@ -162,32 +162,17 @@ curl -X POST "http://your-server:5050/api/v1/import/async" \
 Edit `/opt/azure-test-api/.env`:
 
 ```bash
-# Azure DevOps Configuration
+# Azure DevOps Server URL (Required)
 AZURE_DEVOPS_ORG_URL=http://192.168.10.22:8080/tfs/RPKavoshDevOps
-AZURE_DEVOPS_PROJECT_NAME=Test Process
 
-# Authentication (choose one)
-AZURE_DEVOPS_USERNAME=DOMAIN\\username
-AZURE_DEVOPS_PASSWORD=password
-# OR
-AZURE_DEVOPS_PAT=your_personal_access_token
-
-# API Server Settings
-API_HOST=0.0.0.0
-API_PORT=5050
-API_WORKERS=4
-
-# Logging
+# Logging (Optional)
 LOG_LEVEL=INFO
-LOG_MAX_FILE_SIZE_MB=10
-LOG_BACKUP_COUNT=5
-LOG_CLEANUP_DAYS=30
-
-# Performance
-MAX_UPLOAD_SIZE_MB=100
-REQUEST_TIMEOUT_SECONDS=300
-WORKER_TIMEOUT_SECONDS=300
+LOG_MAX_FILE_SIZE_MB=5
+LOG_BACKUP_COUNT=3
+LOG_CLEANUP_DAYS=7
 ```
+
+**Important**: Authentication credentials (token/username/password) and project names are passed via API requests, not environment variables.
 
 ## Auto-Restart & Auto-Start
 
